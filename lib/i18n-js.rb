@@ -20,20 +20,12 @@ module SimplesIdeias
         raise("Cannot precompile i18n-js translations unless environment is initialized. Please set config.assets.initialize_on_precompile to true.")
     end
 
-    def has_asset_pipeline?
-      Rails.configuration.respond_to?(:assets) && Rails.configuration.assets.enabled
-    end
-
     def config_file
       Rails.root.join("config/i18n-js.yml")
     end
 
     def export_dir
-      if has_asset_pipeline?
-        "app/assets/javascripts/i18n"
-      else
-        "public/javascripts"
-      end
+      "app/assets/javascripts/i18n"
     end
 
     def javascript_file
@@ -104,7 +96,6 @@ module SimplesIdeias
     # Copy configuration and JavaScript library files to
     # <tt>config/i18n-js.yml</tt> and <tt>public/javascripts/i18n.js</tt>.
     def setup!
-      FileUtils.cp(File.dirname(__FILE__) + "/../vendor/assets/javascripts/i18n.js", javascript_file) unless has_asset_pipeline?
       FileUtils.cp(File.dirname(__FILE__) + "/../config/i18n-js.yml", config_file) unless config?
     end
 

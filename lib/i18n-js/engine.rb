@@ -5,8 +5,6 @@ module SimplesIdeias
 
       initializer "i18n-js.asset_dependencies", :after => "sprockets.environment",
                                                 :before => "i18n-js.initialize" do
-        next unless SimplesIdeias::I18n.has_asset_pipeline?
-
         config = I18n.config_file
         cache_file = I18n::Engine.load_path_hash_cache
 
@@ -30,7 +28,6 @@ module SimplesIdeias
 
       # rewrite path cache hash at startup and before each request in development
       config.to_prepare do
-        next unless SimplesIdeias::I18n.has_asset_pipeline?
         SimplesIdeias::I18n::Engine.write_hash_if_changed unless Rails.env.production?
       end
 
