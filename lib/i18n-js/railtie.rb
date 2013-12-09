@@ -4,10 +4,6 @@ module SimplesIdeias
       rake_tasks do
         require "i18n-js/rake"
       end
-
-      initializer "i18n-js.initialize" do |app|
-        app.config.middleware.use(Middleware) if Rails.env.development?
-      end
     end
   end
 end

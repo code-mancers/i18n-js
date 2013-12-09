@@ -4,9 +4,8 @@ module SimplesIdeias
   module I18n
     extend self
 
-    require "i18n-js/railtie" if Rails.version >= "3.0"
-    require "i18n-js/engine" if Rails.version >= "3.1"
-    require "i18n-js/middleware"
+    require "i18n-js/railtie"
+    require "i18n-js/engine"
 
     # deep_merge by Stefan Rusterholz, see http://www.ruby-forum.com/topic/142809
     MERGER = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &MERGER) : v2 }
@@ -30,14 +29,6 @@ module SimplesIdeias
 
     def javascript_file
       Rails.root.join(export_dir, "i18n.js")
-    end
-
-    # Export translations to JavaScript, considering settings
-    # from configuration file
-    def export!
-      translation_segments.each do |filename, translations|
-        save(translations, filename)
-      end
     end
 
     def segments_per_locale(pattern,scope)
@@ -104,19 +95,6 @@ module SimplesIdeias
       require "open-uri"
       contents = open("https://raw.github.com/fnando/i18n-js/master/vendor/assets/javascripts/i18n.js").read
       File.open(javascript_file, "w+") {|f| f << contents}
-    end
-
-    # Convert translations to JSON string and save file.
-    def save(translations, file)
-      file = Rails.root.join(file)
-      FileUtils.mkdir_p File.dirname(file)
-
-      File.open(file, "w+") do |f|
-        f << %(var I18n = I18n || {};\n)
-        f << %(I18n.translations = );
-        f << translations.to_json
-        f << %(;)
-      end
     end
 
     def scoped_translations(scopes) # :nodoc:
